@@ -28,6 +28,8 @@
     .list{display:grid;gap:8px}.item{border:1px solid var(--line);border-radius:13px;padding:10px 12px;background:#fff;display:flex;justify-content:space-between;gap:10px;align-items:center}.item .main{min-width:0}.item b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item span{font-size:11px;color:var(--muted)}.item button{border:0;background:#f2eee9;border-radius:10px;padding:8px 10px}.empty{font-size:12px;color:var(--muted);text-align:center;padding:12px}
     .note{font-size:11px;color:var(--muted);line-height:1.6}.footer{font-size:10px;color:#8a847e;text-align:center;padding:4px 12px 0}
     .modal{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;z-index:20}.sheet{background:#fff;width:100%;max-width:760px;margin:0 auto;border-radius:24px 24px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom));max-height:84vh;overflow:auto}.sheet h3{margin:0 0 10px}.close{width:100%;padding:13px;border:0;border-radius:13px;background:#111;color:#fff;font-weight:800;margin-top:12px}.steps{padding-left:18px;line-height:1.7;font-size:13px}.pricegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.pricegrid input{border:1px solid var(--line);border-radius:12px;padding:12px;font-size:14px;width:100%}
+
+    .photoBox{margin-top:12px;border:1px solid var(--line);border-radius:16px;padding:12px;background:#faf8f5}.photoTitle{font-size:13px;font-weight:800;margin-bottom:8px}.photoActions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.photoPick,.lensBtn{border:1px solid var(--line);background:#fff;border-radius:13px;padding:12px 8px;font-size:13px;font-weight:800;text-align:center}.photoPick input{display:none}.lensBtn{background:#111;color:#fff;border-color:#111}.lensBtn:disabled{opacity:.45}.photoPreviewWrap{display:none;align-items:center;gap:10px;margin-top:10px}.photoPreview{width:82px;height:82px;object-fit:cover;border-radius:13px;border:1px solid var(--line);background:#eee}.photoHelp{font-size:11px;color:var(--muted);line-height:1.55;flex:1}.photoSub{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.55}.shareBtn{width:100%;border:1px solid var(--line);background:#fff;border-radius:13px;padding:11px;margin-top:8px;font-weight:700;display:none}.photoStatus{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;display:none}.photoStatus.show{display:block}
     @media (min-width:620px){.brands{grid-template-columns:repeat(5,1fr)}.searches{grid-template-columns:repeat(3,1fr)}}
   </style>
 </head>
@@ -45,6 +47,18 @@
 
     <label>② 商品名・型番</label>
     <input id="keyword" class="input" placeholder="例：マトラッセ 25 / M45985" autocomplete="off">
+
+    <div class="photoBox">
+      <div class="photoTitle">📷 写真から商品を探す</div>
+      <div class="photoActions">
+        <label class="photoPick">写真を撮る・選ぶ<input id="photoInput" type="file" accept="image/*" capture="environment"></label>
+        <button class="lensBtn" id="lensBtn" type="button">Google Lensで検索</button>
+      </div>
+      <div class="photoPreviewWrap" id="photoPreviewWrap"><img id="photoPreview" class="photoPreview" alt="選択した商品写真"><div class="photoHelp">この写真を使って見た目が近い商品を探します。Lensで商品名・型番が分かったら、上の欄に入れて価格検索できます。</div></div>
+      <button class="shareBtn" id="sharePhotoBtn" type="button">選んだ写真を共有して検索</button>
+      <div class="photoStatus" id="photoStatus"></div>
+      <div class="photoSub">※iPhoneではGoogle Lens側で写真を選ぶ方法が確実です。「Google Lensで検索」を押して、同じ写真を選んでください。</div>
+    </div>
 
     <label>③ 何の値段を見る？</label>
     <div class="mode" id="modeButtons">
@@ -86,7 +100,7 @@
   </section>
 
   <p class="note">※このアプリは各販売サイトの最新検索結果を開いて価格確認する方式です。自動取得・スクレイピングは行いません。表示価格、真贋、在庫、送料、税金などは各サイトで最終確認してください。</p>
-  <div class="footer">RIBO PRICE v1.0</div>
+  <div class="footer">RIBO PRICE v1.1 PHOTO</div>
 </div>
 
 <div class="modal" id="installModal"><div class="sheet"><h3>iPhoneのホーム画面に追加</h3><ol class="steps"><li>このページをSafariで開く</li><li>画面下の「共有」ボタンを押す</li><li>「ホーム画面に追加」を押す</li><li>右上の「追加」を押す</li></ol><p class="note">追加すると普通のアプリのようにホーム画面から起動できます。</p><button class="close" id="closeInstall">閉じる</button></div></div>
@@ -98,6 +112,38 @@ const $=id=>document.getElementById(id);
 const brandGrid=$('brandGrid');
 function renderBrands(){brandGrid.innerHTML='';brands.forEach(b=>{const btn=document.createElement('button');btn.className='brand'+(b===selectedBrand?' active':'')+(b==='その他'?' custom':'');btn.textContent=b;btn.onclick=()=>{selectedBrand=b;renderBrands();$('customWrap').style.display=b==='その他'?'block':'none'};brandGrid.appendChild(btn)})}
 renderBrands();
+
+let selectedPhotoFile=null, selectedPhotoUrl=null;
+const photoInput=$('photoInput'), photoPreview=$('photoPreview'), photoPreviewWrap=$('photoPreviewWrap'), photoStatus=$('photoStatus');
+photoInput.addEventListener('change',()=>{
+  const f=photoInput.files && photoInput.files[0];
+  if(!f)return;
+  selectedPhotoFile=f;
+  if(selectedPhotoUrl)URL.revokeObjectURL(selectedPhotoUrl);
+  selectedPhotoUrl=URL.createObjectURL(f);
+  photoPreview.src=selectedPhotoUrl;
+  photoPreviewWrap.style.display='flex';
+  photoStatus.textContent='写真を選びました。Google Lensで検索できます。';
+  photoStatus.classList.add('show');
+  if(navigator.canShare && navigator.canShare({files:[f]})) $('sharePhotoBtn').style.display='block';
+});
+$('lensBtn').addEventListener('click',()=>{
+  window.open('https://lens.google.com/','_blank','noopener');
+  photoStatus.textContent=selectedPhotoFile ? 'Google Lensが開いたら、今選んだ写真と同じ写真を選んでください。' : 'Google Lensが開いたら「写真を選ぶ」から商品写真を選んでください。';
+  photoStatus.classList.add('show');
+});
+$('sharePhotoBtn').addEventListener('click',async()=>{
+  if(!selectedPhotoFile)return;
+  try{
+    await navigator.share({files:[selectedPhotoFile],title:'商品写真を検索'});
+  }catch(e){
+    if(e && e.name!=='AbortError'){
+      photoStatus.textContent='共有できなかったので、Google Lensで同じ写真を選んで検索してください。';
+      photoStatus.classList.add('show');
+    }
+  }
+});
+
 $('modeButtons').querySelectorAll('button').forEach(btn=>btn.onclick=()=>{$('modeButtons').querySelectorAll('button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');selectedMode=btn.dataset.mode});
 function effectiveBrand(){return selectedBrand==='その他'?($('customBrand').value.trim()||'ブランド'):selectedBrand}
 function encode(q){return encodeURIComponent(q)}
