@@ -1,179 +1,109 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#111111" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="RIBO PRICE" />
-  <title>RIBO PRICE</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="icon-180.png" />
-  <style>
-    :root{--bg:#f7f4ef;--card:#fff;--ink:#171717;--muted:#756f69;--accent:#111;--gold:#b9914b;--line:#e6dfd7;--danger:#bd2f2f}
-    *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:linear-gradient(180deg,#efe7db 0,#f7f4ef 180px);color:var(--ink)}
-    .app{max-width:760px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom))}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.brandmark{display:flex;gap:12px;align-items:center}.logo{width:46px;height:46px;border-radius:14px;background:#111;color:#fff;display:grid;place-items:center;font-weight:800;letter-spacing:.5px;box-shadow:0 8px 24px #0002}.title h1{font-size:20px;margin:0}.title p{font-size:12px;color:var(--muted);margin:3px 0 0}
-    button,.btn{font:inherit}.iconbtn{border:0;background:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 4px 16px #0001}
-    .card{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 10px 30px #604c3610;margin-bottom:14px}
-    .section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.section-title h2{font-size:15px;margin:0}.hint{font-size:11px;color:var(--muted)}
-    .brands{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.brand{border:1px solid var(--line);background:#fff;border-radius:13px;padding:11px 8px;text-align:center;font-size:12px;font-weight:700;min-height:44px}.brand.active{background:#111;color:#fff;border-color:#111}.brand.custom{font-weight:600;color:var(--muted)}
-    label{font-size:12px;font-weight:700;display:block;margin:12px 0 6px}.input{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 13px;font-size:16px;outline:none}.input:focus{border-color:#111}
-    .mode{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.mode button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 4px;font-size:12px}.mode button.active{background:#efe7db;border-color:#b9914b;font-weight:800}
-    .primary{width:100%;border:0;border-radius:15px;padding:15px;background:#111;color:#fff;font-weight:800;font-size:16px;margin-top:14px}.primary:active{transform:scale(.99)}
-    .searches{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.searchlink{border:1px solid var(--line);background:#fff;border-radius:14px;padding:13px;text-decoration:none;color:#111;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700}.searchlink small{color:var(--muted);font-weight:500}.searchlink.gold{border-color:#c9ac76;background:#fffaf1}
-    .resultbox{display:none}.query{background:#f8f6f3;border-radius:12px;padding:10px 12px;font-size:12px;color:#4d4945;word-break:break-all}
-    .row{display:flex;gap:8px}.row>*{flex:1}.secondary{width:100%;border:1px solid var(--line);border-radius:13px;background:#fff;padding:11px;font-weight:700}.favorite{background:#fff6d9;border-color:#e5c96c}
-    .list{display:grid;gap:8px}.item{border:1px solid var(--line);border-radius:13px;padding:10px 12px;background:#fff;display:flex;justify-content:space-between;gap:10px;align-items:center}.item .main{min-width:0}.item b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item span{font-size:11px;color:var(--muted)}.item button{border:0;background:#f2eee9;border-radius:10px;padding:8px 10px}.empty{font-size:12px;color:var(--muted);text-align:center;padding:12px}
-    .note{font-size:11px;color:var(--muted);line-height:1.6}.footer{font-size:10px;color:#8a847e;text-align:center;padding:4px 12px 0}
-    .modal{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;z-index:20}.sheet{background:#fff;width:100%;max-width:760px;margin:0 auto;border-radius:24px 24px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom));max-height:84vh;overflow:auto}.sheet h3{margin:0 0 10px}.close{width:100%;padding:13px;border:0;border-radius:13px;background:#111;color:#fff;font-weight:800;margin-top:12px}.steps{padding-left:18px;line-height:1.7;font-size:13px}.pricegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.pricegrid input{border:1px solid var(--line);border-radius:12px;padding:12px;font-size:14px;width:100%}
-
-    .photoBox{margin-top:12px;border:1px solid var(--line);border-radius:16px;padding:12px;background:#faf8f5}.photoTitle{font-size:13px;font-weight:800;margin-bottom:8px}.photoActions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.photoPick,.lensBtn{border:1px solid var(--line);background:#fff;border-radius:13px;padding:12px 8px;font-size:13px;font-weight:800;text-align:center}.photoPick input{display:none}.lensBtn{background:#111;color:#fff;border-color:#111}.lensBtn:disabled{opacity:.45}.photoPreviewWrap{display:none;align-items:center;gap:10px;margin-top:10px}.photoPreview{width:82px;height:82px;object-fit:cover;border-radius:13px;border:1px solid var(--line);background:#eee}.photoHelp{font-size:11px;color:var(--muted);line-height:1.55;flex:1}.photoSub{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.55}.shareBtn{width:100%;border:1px solid var(--line);background:#fff;border-radius:13px;padding:11px;margin-top:8px;font-weight:700;display:none}.photoStatus{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;display:none}.photoStatus.show{display:block}
-    @media (min-width:620px){.brands{grid-template-columns:repeat(5,1fr)}.searches{grid-template-columns:repeat(3,1fr)}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RIBO PRICE">
+<title>RIBO PRICE AI</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{--bg:#f5f1eb;--card:#fff;--ink:#151515;--muted:#756f69;--line:#e7ded5;--gold:#b99049;--ok:#146b3a;--warn:#9a5b00;--danger:#a82828}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--ink);background:linear-gradient(180deg,#ece2d4 0,#f5f1eb 200px)}
+.app{max-width:760px;margin:auto;padding:calc(16px + env(safe-area-inset-top)) 14px calc(30px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.brandmark{display:flex;gap:11px;align-items:center}.logo{width:48px;height:48px;border-radius:15px;background:#111;color:#fff;display:grid;place-items:center;font-weight:900}.title h1{margin:0;font-size:20px}.title p{margin:3px 0 0;color:var(--muted);font-size:11px}.gear{border:0;background:#fff;border-radius:13px;padding:10px 12px;font-size:18px;box-shadow:0 5px 16px #0001}
+.card{background:rgba(255,255,255,.97);border:1px solid var(--line);border-radius:20px;padding:15px;box-shadow:0 10px 28px #59432710;margin-bottom:13px}.section{font-size:15px;font-weight:900;margin:0 0 10px}.sub{font-size:11px;color:var(--muted);line-height:1.55}
+.brands{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.brand{border:1px solid var(--line);background:#fff;border-radius:12px;min-height:42px;padding:8px 4px;font-size:11px;font-weight:800}.brand.active{background:#111;color:#fff;border-color:#111}
+.photoPick{display:block;border:1.5px dashed #cbbca9;border-radius:17px;background:#faf7f2;padding:18px;text-align:center;font-weight:900;font-size:15px}.photoPick input{display:none}.photoPick small{display:block;font-weight:500;color:var(--muted);font-size:11px;margin-top:5px}.previewWrap{display:none;margin-top:12px;gap:11px;align-items:center}.preview{width:105px;height:105px;border-radius:16px;object-fit:cover;border:1px solid var(--line)}.previewText{font-size:12px;color:var(--muted);line-height:1.6}
+.primary{width:100%;border:0;border-radius:15px;padding:15px;background:#111;color:#fff;font-size:16px;font-weight:900;margin-top:13px}.primary:disabled{opacity:.45}.secondary{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px;background:#fff;font-weight:800}.status{display:none;margin-top:10px;border-radius:12px;padding:10px 12px;background:#f6f3ef;font-size:12px;line-height:1.55}.status.show{display:block}.status.err{background:#fff0f0;color:var(--danger)}
+.loading{display:none;text-align:center;padding:16px}.loading.show{display:block}.spinner{width:30px;height:30px;border:3px solid #ddd;border-top-color:#111;border-radius:50%;margin:0 auto 10px;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.result{display:none}.result.show{display:block}.hero{background:#111;color:#fff;border-radius:18px;padding:15px;margin-bottom:10px}.hero .brandname{font-size:12px;opacity:.7}.hero .product{font-size:21px;font-weight:900;margin-top:3px}.hero .meta{font-size:12px;opacity:.8;margin-top:6px;line-height:1.5}.confidence{display:inline-block;margin-top:9px;border-radius:999px;background:#ffffff18;padding:5px 9px;font-size:11px}
+.priceGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.priceCard{border:1px solid var(--line);border-radius:15px;padding:12px;background:#fff}.priceCard b{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.priceCard strong{font-size:17px}.priceCard.wide{grid-column:1/-1}.summary{border-radius:14px;background:#faf7f2;padding:12px;font-size:12px;line-height:1.7;margin-top:9px}.note{font-size:11px;color:var(--muted);line-height:1.65;margin-top:9px}.links{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.link{display:block;text-decoration:none;color:#111;border:1px solid var(--line);border-radius:12px;padding:11px;font-size:12px;font-weight:800;background:#fff}.link small{display:block;color:var(--muted);font-weight:500;margin-top:2px}
+.historyItem{border:1px solid var(--line);border-radius:13px;padding:10px 11px;margin-top:7px}.historyItem b{display:block;font-size:12px}.historyItem span{font-size:10px;color:var(--muted)}
+.modal{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;z-index:30}.modal.show{display:flex}.sheet{width:100%;max-width:760px;margin:auto;background:#fff;border-radius:24px 24px 0 0;padding:18px 16px calc(22px + env(safe-area-inset-bottom))}.sheet h3{margin:0 0 8px}.input{width:100%;border:1px solid var(--line);border-radius:13px;padding:13px;font-size:14px;margin:7px 0}.tiny{font-size:10px;color:var(--muted);line-height:1.55}.row{display:flex;gap:8px;margin-top:9px}.row>*{flex:1}.footer{text-align:center;color:#999;font-size:10px;margin-top:12px}
+@media(min-width:620px){.brands{grid-template-columns:repeat(6,1fr)}.priceGrid{grid-template-columns:repeat(3,1fr)}.priceCard.wide{grid-column:auto}.links{grid-template-columns:repeat(4,1fr)}}
+</style>
 </head>
 <body>
 <div class="app">
-  <header>
-    <div class="brandmark"><div class="logo">RP</div><div class="title"><h1>RIBO PRICE</h1><p>ブランド品の値段をすぐチェック</p></div></div>
-    <button class="iconbtn" id="installBtn">iPhoneに追加</button>
-  </header>
+<header><div class="brandmark"><div class="logo">RP</div><div class="title"><h1>RIBO PRICE AI</h1><p>写真1枚 → AI判定 → 日本語で国内相場</p></div></div><button class="gear" id="settingsBtn">⚙️</button></header>
 
-  <section class="card">
-    <div class="section-title"><h2>① ブランドを選ぶ</h2><span class="hint">あとから変更OK</span></div>
-    <div class="brands" id="brandGrid"></div>
-    <div id="customWrap" style="display:none"><label>ブランド名</label><input id="customBrand" class="input" placeholder="例：FENDI"></div>
+<section class="card">
+  <h2 class="section">① ブランド（分かれば選択）</h2>
+  <div class="brands" id="brands"></div>
+  <p class="sub">分からなければ「不明」でOK。写真からAIが候補を出します。</p>
+</section>
 
-    <label>② 商品名・型番</label>
-    <input id="keyword" class="input" placeholder="例：マトラッセ 25 / M45985" autocomplete="off">
+<section class="card">
+  <h2 class="section">② 商品を撮影・選択</h2>
+  <label class="photoPick">📷 写真を撮る・選ぶ<input id="photoInput" type="file" accept="image/*" capture="environment"><small>バッグ・財布・時計・アクセサリーなど</small></label>
+  <div class="previewWrap" id="previewWrap"><img class="preview" id="preview" alt="商品写真"><div class="previewText">この写真をAIが直接見ます。<br>Google Lensは開きません。<br><b>結果はこのアプリ内に日本語で戻ります。</b></div></div>
+  <button class="primary" id="aiBtn" disabled>AIで判定して日本の値段を見る</button>
+  <div class="status" id="status"></div>
+</section>
 
-    <div class="photoBox">
-      <div class="photoTitle">📷 写真から商品を探す</div>
-      <div class="photoActions">
-        <label class="photoPick">写真を撮る・選ぶ<input id="photoInput" type="file" accept="image/*" capture="environment"></label>
-        <button class="lensBtn" id="lensBtn" type="button">Google Lensで検索</button>
-      </div>
-      <div class="photoPreviewWrap" id="photoPreviewWrap"><img id="photoPreview" class="photoPreview" alt="選択した商品写真"><div class="photoHelp">この写真を使って見た目が近い商品を探します。Lensで商品名・型番が分かったら、上の欄に入れて価格検索できます。</div></div>
-      <button class="shareBtn" id="sharePhotoBtn" type="button">選んだ写真を共有して検索</button>
-      <div class="photoStatus" id="photoStatus"></div>
-      <div class="photoSub">※iPhoneではGoogle Lens側で写真を選ぶ方法が確実です。「Google Lensで検索」を押して、同じ写真を選んでください。</div>
-    </div>
+<div class="loading" id="loading"><div class="spinner"></div><b>AIが商品を判定して、日本の相場を調べています…</b><div class="sub" style="margin-top:6px">10〜30秒ほどかかることがあります</div></div>
 
-    <label>③ 何の値段を見る？</label>
-    <div class="mode" id="modeButtons">
-      <button data-mode="中古 相場" class="active">中古相場</button>
-      <button data-mode="新品 価格">新品価格</button>
-      <button data-mode="買取 価格">買取価格</button>
-    </div>
+<section class="card result" id="result">
+  <h2 class="section">AI判定結果</h2>
+  <div class="hero"><div class="brandname" id="rBrand"></div><div class="product" id="rProduct"></div><div class="meta" id="rMeta"></div><div class="confidence" id="rConfidence"></div></div>
+  <div class="priceGrid">
+    <div class="priceCard"><b>🇯🇵 新品参考</b><strong id="rNew">—</strong></div>
+    <div class="priceCard"><b>🇯🇵 中古販売相場</b><strong id="rUsed">—</strong></div>
+    <div class="priceCard"><b>💴 買取目安</b><strong id="rBuy">—</strong></div>
+    <div class="priceCard wide"><b>🌎 海外参考を円換算</b><strong id="rOverseas">—</strong></div>
+  </div>
+  <div class="summary" id="rSummary"></div>
+  <div class="note" id="rNote"></div>
+  <div class="links" id="links"></div>
+  <button class="secondary" id="retryBtn" style="margin-top:10px">別の写真で調べる</button>
+</section>
 
-    <button class="primary" id="searchBtn">価格を調べる</button>
-  </section>
-
-  <section class="card resultbox" id="resultBox">
-    <div class="section-title"><h2>検索する</h2><span class="hint">各サイトで最新価格を確認</span></div>
-    <div class="query" id="queryText"></div>
-    <div class="searches" id="searchLinks"></div>
-    <div class="row" style="margin-top:10px">
-      <button class="secondary favorite" id="favBtn">♡ お気に入り保存</button>
-      <button class="secondary" id="copyBtn">検索語をコピー</button>
-    </div>
-
-    <label>見つけた価格をメモ（任意）</label>
-    <div class="pricegrid"><input id="memoPrice" inputmode="numeric" placeholder="価格 例：298000"><input id="memoShop" placeholder="店名 例：メルカリ"></div>
-    <button class="secondary" id="savePriceBtn" style="margin-top:8px">この価格を履歴に保存</button>
-  </section>
-
-  <section class="card">
-    <div class="section-title"><h2>♡ お気に入り</h2><button class="iconbtn" id="clearFav" style="padding:7px 9px;font-size:11px">全削除</button></div>
-    <div class="list" id="favList"></div>
-  </section>
-
-  <section class="card">
-    <div class="section-title"><h2>最近調べたもの</h2><button class="iconbtn" id="clearHist" style="padding:7px 9px;font-size:11px">全削除</button></div>
-    <div class="list" id="historyList"></div>
-  </section>
-
-  <section class="card">
-    <div class="section-title"><h2>価格メモ</h2><span class="hint">端末内だけに保存</span></div>
-    <div class="list" id="priceList"></div>
-  </section>
-
-  <p class="note">※このアプリは各販売サイトの最新検索結果を開いて価格確認する方式です。自動取得・スクレイピングは行いません。表示価格、真贋、在庫、送料、税金などは各サイトで最終確認してください。</p>
-  <div class="footer">RIBO PRICE v1.1 PHOTO</div>
+<section class="card"><h2 class="section">最近のAI判定</h2><div id="history"><div class="sub">まだありません</div></div></section>
+<p class="sub">※写真だけでは同型・年代・サイズ・素材・真贋を完全に確定できない場合があります。AIは候補と相場を表示し、不確かな場合はその旨を表示します。購入前は商品番号・サイズ・状態・真贋を販売店で確認してください。</p>
+<div class="footer">RIBO PRICE AI v2.1</div>
 </div>
 
-<div class="modal" id="installModal"><div class="sheet"><h3>iPhoneのホーム画面に追加</h3><ol class="steps"><li>このページをSafariで開く</li><li>画面下の「共有」ボタンを押す</li><li>「ホーム画面に追加」を押す</li><li>右上の「追加」を押す</li></ol><p class="note">追加すると普通のアプリのようにホーム画面から起動できます。</p><button class="close" id="closeInstall">閉じる</button></div></div>
+<div class="modal" id="settingsModal"><div class="sheet"><h3>初回設定</h3><p class="sub">AI判定用の安全な接続先（Cloudflare WorkerのURL）を1回だけ登録します。</p><input class="input" id="endpoint" placeholder="https://ribo-price-ai.xxxxx.workers.dev"><div class="tiny">OpenAIのAPIキーはここには入れません。APIキーをiPhoneやGitHubに保存すると危険なので、Worker側のSecretに保存します。</div><div class="row"><button class="secondary" id="closeSettings">閉じる</button><button class="primary" id="saveSettings" style="margin-top:0">保存</button></div></div></div>
 
 <script>
-const brands=['CHANEL','LOUIS VUITTON','HERMÈS','DIOR','GUCCI','PRADA','CELINE','LOEWE','Cartier','Tiffany & Co.','その他'];
-let selectedBrand='CHANEL', selectedMode='中古 相場', currentQuery='';
+const DEFAULT_ENDPOINT='https://ribo-price-ai.shinobu-nakamura-11-10.workers.dev';
 const $=id=>document.getElementById(id);
-const brandGrid=$('brandGrid');
-function renderBrands(){brandGrid.innerHTML='';brands.forEach(b=>{const btn=document.createElement('button');btn.className='brand'+(b===selectedBrand?' active':'')+(b==='その他'?' custom':'');btn.textContent=b;btn.onclick=()=>{selectedBrand=b;renderBrands();$('customWrap').style.display=b==='その他'?'block':'none'};brandGrid.appendChild(btn)})}
-renderBrands();
+const brandList=['不明','CHANEL','LOUIS VUITTON','HERMÈS','DIOR','GUCCI','PRADA','CELINE','LOEWE','Cartier','Tiffany & Co.','FENDI'];
+let selectedBrand='不明', selectedDataUrl='', selectedThumb='';
+function renderBrands(){ $('brands').innerHTML=''; brandList.forEach(b=>{const x=document.createElement('button');x.className='brand'+(b===selectedBrand?' active':'');x.textContent=b;x.onclick=()=>{selectedBrand=b;renderBrands()};$('brands').appendChild(x)}); }renderBrands();
 
-let selectedPhotoFile=null, selectedPhotoUrl=null;
-const photoInput=$('photoInput'), photoPreview=$('photoPreview'), photoPreviewWrap=$('photoPreviewWrap'), photoStatus=$('photoStatus');
-photoInput.addEventListener('change',()=>{
-  const f=photoInput.files && photoInput.files[0];
-  if(!f)return;
-  selectedPhotoFile=f;
-  if(selectedPhotoUrl)URL.revokeObjectURL(selectedPhotoUrl);
-  selectedPhotoUrl=URL.createObjectURL(f);
-  photoPreview.src=selectedPhotoUrl;
-  photoPreviewWrap.style.display='flex';
-  photoStatus.textContent='写真を選びました。Google Lensで検索できます。';
-  photoStatus.classList.add('show');
-  if(navigator.canShare && navigator.canShare({files:[f]})) $('sharePhotoBtn').style.display='block';
-});
-$('lensBtn').addEventListener('click',()=>{
-  window.open('https://lens.google.com/','_blank','noopener');
-  photoStatus.textContent=selectedPhotoFile ? 'Google Lensが開いたら、今選んだ写真と同じ写真を選んでください。' : 'Google Lensが開いたら「写真を選ぶ」から商品写真を選んでください。';
-  photoStatus.classList.add('show');
-});
-$('sharePhotoBtn').addEventListener('click',async()=>{
-  if(!selectedPhotoFile)return;
-  try{
-    await navigator.share({files:[selectedPhotoFile],title:'商品写真を検索'});
-  }catch(e){
-    if(e && e.name!=='AbortError'){
-      photoStatus.textContent='共有できなかったので、Google Lensで同じ写真を選んで検索してください。';
-      photoStatus.classList.add('show');
-    }
-  }
-});
+$('settingsBtn').onclick=()=>{$('endpoint').value=localStorage.getItem('rp_ai_endpoint')||DEFAULT_ENDPOINT;$('settingsModal').classList.add('show')};
+$('closeSettings').onclick=()=>$('settingsModal').classList.remove('show');
+$('saveSettings').onclick=()=>{let v=$('endpoint').value.trim().replace(/\/$/,'');if(!/^https:\/\//.test(v)){alert('https:// から始まるWorker URLを入れてください');return}localStorage.setItem('rp_ai_endpoint',v);$('settingsModal').classList.remove('show');showStatus('初回設定を保存しました。写真を選んでAI判定できます。')};
+$('settingsModal').onclick=e=>{if(e.target===$('settingsModal'))$('settingsModal').classList.remove('show')};
 
-$('modeButtons').querySelectorAll('button').forEach(btn=>btn.onclick=()=>{$('modeButtons').querySelectorAll('button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');selectedMode=btn.dataset.mode});
-function effectiveBrand(){return selectedBrand==='その他'?($('customBrand').value.trim()||'ブランド'):selectedBrand}
-function encode(q){return encodeURIComponent(q)}
-function google(q){return 'https://www.google.com/search?q='+encode(q)}
-function addHistory(q){let h=JSON.parse(localStorage.getItem('rp_history')||'[]');h=h.filter(x=>x.q!==q);h.unshift({q,t:Date.now()});h=h.slice(0,20);localStorage.setItem('rp_history',JSON.stringify(h));renderHistory()}
-function buildLinks(q){const links=[
- ['Googleショッピング','新品・中古を横断','https://www.google.com/search?tbm=shop&q='+encode(q),'gold'],
- ['メルカリ','中古の出品価格',google('site:jp.mercari.com '+q),''],
- ['Yahoo!ショッピング','新品・中古',google('site:shopping.yahoo.co.jp '+q),''],
- ['楽天市場','新品・中古',google('site:search.rakuten.co.jp '+q),''],
- ['BUYMA','海外・新品中心',google('site:buyma.com '+q),''],
- ['KOMEHYO','中古ブランド専門',google('site:komehyo.jp '+q),'']
- ];
- $('searchLinks').innerHTML='';links.forEach(([n,s,u,c])=>{const a=document.createElement('a');a.className='searchlink '+c;a.href=u;a.target='_blank';a.rel='noopener';a.innerHTML='<span>'+n+'<br><small>'+s+'</small></span><span>›</span>';$('searchLinks').appendChild(a)});
-}
-function runSearch(){const kw=$('keyword').value.trim();if(!kw){$('keyword').focus();return} currentQuery=(effectiveBrand()+' '+kw+' '+selectedMode).trim();$('queryText').textContent=currentQuery;buildLinks(currentQuery);$('resultBox').style.display='block';addHistory(currentQuery);$('resultBox').scrollIntoView({behavior:'smooth',block:'start'})}
-$('searchBtn').onclick=runSearch;$('keyword').addEventListener('keydown',e=>{if(e.key==='Enter')runSearch()});
-$('copyBtn').onclick=async()=>{if(!currentQuery)return;try{await navigator.clipboard.writeText(currentQuery);$('copyBtn').textContent='コピーしました';setTimeout(()=>$('copyBtn').textContent='検索語をコピー',1200)}catch(e){alert(currentQuery)}};
-$('favBtn').onclick=()=>{if(!currentQuery)return;let f=JSON.parse(localStorage.getItem('rp_favs')||'[]');if(!f.some(x=>x.q===currentQuery))f.unshift({q:currentQuery,t:Date.now()});localStorage.setItem('rp_favs',JSON.stringify(f));renderFavs();$('favBtn').textContent='♥ 保存しました';setTimeout(()=>$('favBtn').textContent='♡ お気に入り保存',1200)};
-function itemHtml(x,kind){const d=new Date(x.t);return `<div class="item"><div class="main"><b>${escapeHtml(x.q)}</b><span>${d.toLocaleDateString('ja-JP')} ${d.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'})}</span></div><button data-q="${encodeURIComponent(x.q)}" data-kind="${kind}">検索</button></div>`}
-function wireList(id){$(id).querySelectorAll('button[data-q]').forEach(b=>b.onclick=()=>{currentQuery=decodeURIComponent(b.dataset.q);$('queryText').textContent=currentQuery;buildLinks(currentQuery);$('resultBox').style.display='block';$('resultBox').scrollIntoView({behavior:'smooth',block:'start'})})}
-function renderFavs(){let f=JSON.parse(localStorage.getItem('rp_favs')||'[]');$('favList').innerHTML=f.length?f.map(x=>itemHtml(x,'f')).join(''):'<div class="empty">まだありません</div>';wireList('favList')}
-function renderHistory(){let h=JSON.parse(localStorage.getItem('rp_history')||'[]');$('historyList').innerHTML=h.length?h.map(x=>itemHtml(x,'h')).join(''):'<div class="empty">まだありません</div>';wireList('historyList')}
-function escapeHtml(s){return s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-$('clearFav').onclick=()=>{localStorage.removeItem('rp_favs');renderFavs()};$('clearHist').onclick=()=>{localStorage.removeItem('rp_history');renderHistory()};
-$('savePriceBtn').onclick=()=>{if(!currentQuery)return;const p=$('memoPrice').value.trim(),s=$('memoShop').value.trim();if(!p){$('memoPrice').focus();return}let a=JSON.parse(localStorage.getItem('rp_prices')||'[]');a.unshift({q:currentQuery,p,s,t:Date.now()});a=a.slice(0,50);localStorage.setItem('rp_prices',JSON.stringify(a));$('memoPrice').value='';$('memoShop').value='';renderPrices()};
-function renderPrices(){let a=JSON.parse(localStorage.getItem('rp_prices')||'[]');$('priceList').innerHTML=a.length?a.map(x=>`<div class="item"><div class="main"><b>${escapeHtml(x.q)}</b><span>${escapeHtml(x.s||'価格メモ')} · ¥${Number(String(x.p).replace(/\D/g,'')||0).toLocaleString('ja-JP')} · ${new Date(x.t).toLocaleDateString('ja-JP')}</span></div></div>`).join(''):'<div class="empty">まだありません</div>'}
-$('installBtn').onclick=()=>$('installModal').style.display='flex';$('closeInstall').onclick=()=>$('installModal').style.display='none';$('installModal').onclick=e=>{if(e.target===$('installModal'))$('installModal').style.display='none'};
+$('photoInput').addEventListener('change',async()=>{const f=$('photoInput').files?.[0];if(!f)return;try{const r=await compressImage(f,1500,.82);selectedDataUrl=r.full;selectedThumb=r.thumb;$('preview').src=selectedThumb;$('previewWrap').style.display='flex';$('aiBtn').disabled=false;showStatus('写真を選びました。「AIで判定」を押してください。')}catch(e){showStatus('写真の読み込みに失敗しました。別の写真を試してください。',true)}});
+function compressImage(file,maxSide,quality){return new Promise((resolve,reject)=>{const fr=new FileReader();fr.onerror=reject;fr.onload=()=>{const img=new Image();img.onerror=reject;img.onload=()=>{let w=img.width,h=img.height;const scale=Math.min(1,maxSide/Math.max(w,h));w=Math.round(w*scale);h=Math.round(h*scale);const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.drawImage(img,0,0,w,h);const full=c.toDataURL('image/jpeg',quality);const t=document.createElement('canvas');const ts=Math.min(1,300/Math.max(w,h));t.width=Math.round(w*ts);t.height=Math.round(h*ts);t.getContext('2d').drawImage(c,0,0,t.width,t.height);resolve({full,thumb:t.toDataURL('image/jpeg',.72)})};img.src=fr.result};fr.readAsDataURL(file)})}
+function showStatus(msg,err=false){const s=$('status');s.textContent=msg;s.className='status show'+(err?' err':'')}
+function yenRange(min,max){min=Number(min||0);max=Number(max||0);if(!min&&!max)return '情報不足';if(min&&max&&min!==max)return '¥'+min.toLocaleString('ja-JP')+'〜¥'+max.toLocaleString('ja-JP');return '¥'+(max||min).toLocaleString('ja-JP')}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function searchUrl(site,q){return 'https://www.google.com/search?q='+encodeURIComponent('site:'+site+' '+q)}
+
+$('aiBtn').onclick=async()=>{
+ if(!selectedDataUrl)return;
+ const endpoint=localStorage.getItem('rp_ai_endpoint') || DEFAULT_ENDPOINT;
+ if(!endpoint){$('settingsBtn').click();showStatus('初回だけAI接続設定が必要です。',true);return}
+ $('loading').classList.add('show');$('result').classList.remove('show');$('aiBtn').disabled=true;showStatus('AIに写真を送信しています…');
+ try{
+  const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:selectedDataUrl,brand_hint:selectedBrand})});
+  const raw=await res.text();let data;try{data=JSON.parse(raw)}catch{throw new Error('サーバー応答を読めませんでした')}
+  if(!res.ok)throw new Error(data.error||('HTTP '+res.status));
+  renderResult(data);saveHistory(data);showStatus('判定できました。下に日本語で相場を表示しました。');
+ }catch(e){showStatus('AI判定に失敗しました：'+e.message,true)}finally{$('loading').classList.remove('show');$('aiBtn').disabled=false}
+};
+function renderResult(d){$('rBrand').textContent=d.brand||'ブランド不明';$('rProduct').textContent=d.product_name_jp||'商品候補';const meta=[d.model_code?('型番 '+d.model_code):'',d.category||'',d.color_material||''].filter(Boolean).join(' / ');$('rMeta').textContent=meta;$('rConfidence').textContent='写真判定の確度 '+Math.max(0,Math.min(100,Number(d.identification_confidence||0)))+'%';$('rNew').textContent=yenRange(d.japan_new_min,d.japan_new_max);$('rUsed').textContent=yenRange(d.japan_used_min,d.japan_used_max);$('rBuy').textContent=yenRange(d.japan_buyback_min,d.japan_buyback_max);$('rOverseas').textContent=yenRange(d.overseas_jpy_min,d.overseas_jpy_max);$('rSummary').textContent=d.price_summary||'国内相場を確認しました。';$('rNote').textContent=[d.identification_note,d.caveats].filter(Boolean).join(' / ');const q=d.search_keywords||[d.brand,d.product_name_jp,d.model_code].filter(Boolean).join(' ');const sites=[['楽天','search.rakuten.co.jp'],['Yahoo!','shopping.yahoo.co.jp'],['メルカリ','jp.mercari.com'],['KOMEHYO','komehyo.jp']];$('links').innerHTML=sites.map(([n,s])=>`<a class="link" target="_blank" rel="noopener" href="${searchUrl(s,q)}">${n}<small>日本の販売価格を見る</small></a>`).join('');$('result').classList.add('show');$('result').scrollIntoView({behavior:'smooth',block:'start'})}
+function saveHistory(d){let h=JSON.parse(localStorage.getItem('rp_ai_history')||'[]');h.unshift({brand:d.brand||'',name:d.product_name_jp||'',used:d.japan_used_min||0,used2:d.japan_used_max||0,t:Date.now()});h=h.slice(0,12);localStorage.setItem('rp_ai_history',JSON.stringify(h));renderHistory()}
+function renderHistory(){const h=JSON.parse(localStorage.getItem('rp_ai_history')||'[]');$('history').innerHTML=h.length?h.map(x=>`<div class="historyItem"><b>${esc(x.brand)} ${esc(x.name)}</b><span>中古目安 ${yenRange(x.used,x.used2)} ・ ${new Date(x.t).toLocaleString('ja-JP')}</span></div>`).join(''):'<div class="sub">まだありません</div>'}renderHistory();
+$('retryBtn').onclick=()=>{window.scrollTo({top:0,behavior:'smooth'});$('photoInput').value='';selectedDataUrl='';$('previewWrap').style.display='none';$('aiBtn').disabled=true};
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}))}
-renderFavs();renderHistory();renderPrices();
 </script>
-</body>
-</html>
+</body></html>
